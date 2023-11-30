@@ -24,7 +24,7 @@
 
 ## `var` 关键字 
 
-1、没有块级作用域的概率
+1、没有块级作用域的概念
 
 ```js
 // Global Scope
@@ -37,7 +37,7 @@ console.log(a); // 10
 上述代码，在**全局作用域**中， 且在**块级作用域** `{}` 中， a 输出的结果为 10， 由此可以看出 `var` 声明的变量不存在 块级作用域的概率
 
 
-2、有全局作用域、函数作用域的概率
+2、有全局作用域、函数作用域的概念
 ```js
 // Global Scope
 var a = 10;
@@ -113,15 +113,132 @@ function checkScope() {
 上述代码、在 **全局作用域**中声明了2次 `a`, 以最后一次声明有效， 打印为 20。 同理， 在 **函数作用域**中 也是一样的。
 
 
+## `let` 关键字
 
+1、有块级作用域的概念
 
+```js
+{
+    // Block Scope
+    let a = 10;
+}
+console.log(a); // ReferenceError: a is not defined 引用错误：a 未定义
+```
+上述代码、打印 `a` 报错， 说明存在 **块级作用域** 的概念
 
+2、 不存在变量提升
+```js
+{
+    // Block Scope
+    console.log(a); // ReferenceError: Cannot access 'a' before initialization 引用错误：在初始化之前无法访问“a”
+    let a = 10;
+}
+```
+上述代码、 打印 `a` 报错： 无法在初始化之前访问。 说明不存在变量提升
 
+3、暂时性死区 ( `temporal dead zone`, 简称 `TDZ`)
+```js
+{
+    // Block Scope
+    console.log(a); // ReferenceError: Cannot access 'a' before initialization 引用错误：在初始化之前无法访问“a”
+    let a = 10;
+}
+if (true) {
+    // TDZ 开始
+    console.log(a); // ReferenceError: Cannot access 'a' before initialization 引用错误：在初始化之前无法访问“a”
+    
+    let a; // TDZ 结束
+    console.log(a); // undefined
+    
+    a = 123;
+    console.log(a); // 123
+}
+```
+上述代码，使用let 声明的变量 a, 导致绑定这个块级作用域， 所以在 let 声明变量前， 打印的变量 a 报错。
+这是因为使用 let/const 所声明的变量会存在暂时性死区。 
 
+什么是暂时性死区： 简单理解就是在声明变量之前该变量是不可使用的
 
+4、同一块作用域中不允许重复声明
+```js
+    // Block Scope
+    let A;
+    var A;
+    let A; // SyntaxError: Identifier 'A' has already been declared 语法错误：已声明标识符“A”
+```
 
+## `const` 关键字
+
+1、必须立即初始化， 不能留到以后赋值
+
+```js
+// Block Scope
+const a; // SyntaxError: Missing initializer in const declaration 语法错误：const 声明中缺少初始值设定项
+```
+上述代码、用 `const` 声明的变量 a 没有进行初始化，所以报错。
 
 > <a id="answer">var、let、const 的区别？ 什么是块级作用域？ 如何用？</a>
 
+2、常量的值不能改变
 
+```js
+// Block Scope
+{
+    const a = 10;
+    a = 20; // TypeError: Assignment to constant variable. 类型错误：赋值为常量变量。
+}
+```
+上述代码、用 `const` 声明了变量 `a` 且 初始化为 10， 然后试图修改 `a` 的值， 报错。
+`const` 实际上保证的， 并不是变量的值不得改动， 而是变量指向的那个内存地址所保存的数据不得改动。
+
+## 总结 
+
+> `var` 关键字
+
+1、没有块级作用域的概率
+
+2、有全局作用域、函数作用域的概率
+
+3、不初始化值默认为 `undefined`
+
+4、存在变量提升
+
+5、全局作用域 `var` 声明的变量会挂在道 `window` 对象下
+
+6、 同一作用域中允许重复声明
+
+> `let` 关键字
+
+1、有块级作用域的概念
+
+2、不存在变量提升
+
+3、暂时性死区
+
+4、用一作用域中不允许
+
+> `const` 关键字
+
+1、与 `let` 特性一样， 仅有2个差别
+
+2、区别1: 必须初始化，不能留道以后赋值
+
+3、区别2: 常量的值不能改变
+
+> <a id="answer">var、let、const 的区别？ 什么是块级作用域？ 如何用？</a>
+
+> 参考答案：
+>
+> 1、var 定义的变量，没有块的概念，可以跨块访问，不能跨函数访问，有变量提升，可以重复声明
+> 
+> 2、let 定义的变量，有块的概率，不能跨块或者函数访问，不能变量提升，不可以重复声明
+> 
+> 3、const 定义的常量，使用必须初始化(赋值), 有块的概率，不能跨块或者函数访问，且不能修改值、变量提升、重复声明
+> 
+> 块级作用域是在 ES6 中新增的，在 ES6 之前只有全局作用域和函数作用域
+> 
+> 块级作用域 由 {} 包括， if 语句和 for 语句里的 {} 也属于块作用域。 
+> 
+> 没有块级作用域时候， if或者for会泄露成全局变量，其次 解决了 {} 中的内层变量可能会覆盖外层的变量。 
+>
 [顶部](#top)
