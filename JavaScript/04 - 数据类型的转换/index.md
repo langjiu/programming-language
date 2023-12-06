@@ -76,7 +76,7 @@ Number([5]) // 5
 请看下面的例子。
 
 ```js
-// valueOf 和 toString 方法是任何对象或者值都有的，因为这个两个方法是挂在 Object.protype 上面的
+// valueOf 和 toString 方法是任何对象或者值都有的，因为这个两个方法是挂在 Object.prototype 上面的
 var obj = {x: 1};
 
 // console.log(obj.valueOf()); // > {x: 1}
@@ -114,3 +114,93 @@ String(false) // 'fasle'
 String(undefined) // 'undefined'
 String(null) // 'null' 
 ```
+
+**(2) 对象**
+
+`String` 方法的参数如果是对象， 返回一个类型字符串; 如果是数组，返回该数组的字符串形式。
+
+```js
+String({a:1}) // "[object Onject]"
+String([1,2,3]) // "1,2,3"
+```
+
+`String` 方法的转换规则， 与Number方法基本相同， 只是互换了 `valueOf` 方法和 `toString` 方法的执行顺序。
+
+1、 先调用对象自身的 `toString` 方法. 如果返回原始类型的值，则对该值使用 `String` 函数, 不再进行以下步骤。
+
+2、 如果 `toString` 方法返回的是对象， 再调用原对象的 valueOf 方法。 如果返回原始类型的值， 则对该值使用 String 函数，不再进行一下步骤。
+
+3、 如果 valueOf 方法返回的是对象，就报错。
+
+```js
+Srting({a:1})
+// "[object Onject]"
+
+// 等同于
+String({a:1}).toString()
+// "[object Onject]"
+```
+
+上面代码先调用对象的 `toString` 方法,发现返回的是字符串 `[object Onject]`, 就不再调用 `valueOf` 方法了.
+
+如果 `toString` 方法和 `valueOf` 方法， 返回的都是对象， 就会报错。
+
+下面是通过自定义 toString 方法， 改变返回值的例子。
+
+```js
+String({
+    toString: function () {
+        return 3;
+    }
+}) 
+// '3'
+
+String({
+    valueOf: function () {
+        return 2;
+    }
+})
+// "[object Onject]"
+
+String({
+    valueOf: function () {
+        return 2;
+    },
+    toString: function () {
+        return 3;
+    }
+})
+// '3'
+```
+上面代码对三个对象使用 `String` 函数。第一个对象返回 `toString` 方法的值（数值3）， 第二个对象返回的还是 `toString` 方法的值（`[object Onject]`）, 第三个对象表示 `toString` 方法先于 `valueOf` 方法执行。
+
+
+### `Boolean()`
+
+`Boolean()` 函数可以将任意类型的值转为布尔值。
+
+他的转换规则相对简单： 除了以下五个值的转换结果为 `false`, 其他的值全部为 `true` .
+ 
+- undefined
+- null
+- 0 (包含 -0 和 +0)
+- NaN
+- `''`(空字符串) 
+```js
+Boolean(undefined) // false
+Boolean(null) // false
+Boolean(0) // false
+Boolean(NaN) // false
+Boolean('') // false
+Boolean("") // false
+Boolean(``) // false
+```
+
+当然 true 和 false 这两个布尔值不会发生变化。
+
+```js
+Boolean(true) // true
+Boolean(false) // false
+```
+
+所有的对象（包括空对象）的转换结果都是 `true`, 甚至连 `false` 对应的布尔值对象 `new Boolean(false)` 也是 `true` 
