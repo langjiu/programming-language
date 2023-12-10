@@ -1,7 +1,22 @@
 # <a id="top"> 值和引用 <a/>
 ## 思考
 
-> [JS 的基本数据类型有哪些？ 基本数据类型和引用数据类型的区别](#answer)
+> [JS 的基本数据类型有哪些？ 基本数据类型和引用数据类型的区别](#answer) 
+
+```js
+// 字节面试题
+var foo = { bar : 1};
+var arr1 = [1, 2, foo];
+var arr2 = arr1.slice(1);   
+arr2[0]++;  
+arr2[1].bar++;   
+foo.bar++;   
+arr1[2].bar++;   
+console.log(arr1[1] === arr2[0]);  
+console.log(arr1[2] === arr2[1]);  
+console.log(foo.bar)  
+```
+
 
 ## 值的引用相关内容
 
@@ -123,7 +138,27 @@ var d = { m: 20 };
 > 
 >- 引用值： 赋值的是地址
 
+```js
+var foo = { bar : 1};
+var arr1 = [1, 2, foo];
+var arr2 = arr1.slice(1); // [2, foo]
 
+arr2[0]++; // arr2 : [3, foo]
+arr2[1].bar++; // foo : {bar : 2}
+
+foo.bar++; // foo : {bar : 3}
+
+arr1[2].bar++; // foo : {bar : 4}
+
+
+// foo = { bar : 4};
+// arr1 = [1, 2, foo];
+// arr2 = [3, foo]
+
+console.log(arr1[1] === arr2[0]); // false
+console.log(arr1[2] === arr2[1]); // true
+console.log(foo.bar) // 4
+```
 
 [顶部](#top)
 
