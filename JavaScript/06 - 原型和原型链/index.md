@@ -128,8 +128,8 @@ console.log(Object.prototype.constructor.__proto__.constructor.__proto__ === Obj
 > <a id="answer">说一说你对 JavaScript 中原型与原型链的理解？（美团 2019年）</a>
 > 
 > 参考答案
-> - 每个对象都有一个 __proto__ 属性， 该属性指向自己的原型对象
-> - 每个构造函数都有一个 prototype 属性， 该属性指向实力对象的原型对象
+> - 每个对象都有一个 `__proto__` 属性， 该属性指向自己的原型对象
+> - 每个构造函数都有一个 prototype 属性， 该属性指向实例对象的原型对象
 > - 原型对象里的 constructor 指向构造函数本身
 > 
 > 如下图
@@ -144,10 +144,11 @@ console.log(Object.prototype.constructor.__proto__.constructor.__proto__ === Obj
 > 
 > 参考答案
 > 
+> 
 > 指向该构造函数的实例化出来对象的原型对象
 > 
 > 对于构造函数来讲， 可以通过 prototype 访问到该对象
 > 
-> 对于实例对象来讲， 可以通过隐式属性 __proto__ 来访问到。
+> 对于实例对象来讲， 可以通过隐式属性 `__proto__` 来访问到。
 
 [顶部](#top)
