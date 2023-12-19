@@ -50,30 +50,88 @@
 // }
 // console.log(stu.son.fn()) // zhangxiaosan
 
-var o1 = {
-    text: 'o1',
-    fn() {
-        return this.text;
-    }
+// var o1 = {
+//     text: 'o1',
+//     fn() {
+//         return this.text;
+//     }
+// }
+//
+// var o2 = {
+//     text: 'o2',
+//     fn() {
+//         return o1.fn();
+//     }
+// }
+//
+// var o3 = {
+//     text: 'o3',
+//     fn() {
+//         var fn2 = o1.fn;
+//         return fn2(); // 这里相当于是全局调用
+//     }
+// }
+//
+// console.log(o1.fn())
+//
+// console.log(o2.fn())
+//
+// console.log(o3.fn())
+
+// call
+// A.call(B)
+// A 通常是一个方法
+// B 通常是一个对象
+// 调用 A 方法， 但是 this 指向 B 这个对象
+
+// var obj = {};
+// function fn() {
+//     return this;
+// }
+
+// console.log(fn() === global); // true
+// console.log(fn.call(obj) === obj); // true
+
+// 下面的情况 this 指向全局对象
+// console.log(fn.call());
+// console.log(fn.call(null));
+// console.log(fn.call(undefined));
+
+// 总之 this  就指向你传入的对象
+
+// call 第一个参数是 this 指向的对象
+// 之后的参数就是参数列表， 这些参数会传递给前面的方法
+
+// call 第一个参数是 this 指向的对象
+// 之后的参数就是参数列表， 这些参数会传递前面的方法
+// function add(a, b) {
+//     return a + b;
+// }
+//
+// console.log(add.call(null, 1, 2)); // 3
+//
+// var f = function () {
+//     return this;
+// }
+// console.log(f.call(5)) // [Number: 5]
+
+// call 一个经常的应用， 就是调用原生的方法
+
+var obj = {};
+
+console.log(obj.hasOwnProperty('toString')); // false
+console.log(obj.toString()); // [object Object]
+
+// 通过上面的例子， 我们可以知道
+// obj 能够调用 toString, 但是 toString 这个方法并不是他自身所拥有的
+// 来自它的原型对象上面
+
+obj.hasOwnProperty = function () {
+    return 'aaa';
 }
+console.log(obj.hasOwnProperty('toString')); // aaa
 
-var o2 = {
-    text: 'o2',
-    fn() {
-        return o1.fn();
-    }
-}
+// 上面我们对 hasOwnProperty 这个方法进行了覆盖
+// 使用 call 可以调用原生的方法
+console.log(Object.prototype.hasOwnProperty.call(obj, 'toString')); // false
 
-var o3 = {
-    text: 'o3',
-    fn() {
-        var fn2 = o1.fn;
-        return fn2(); // 这里相当于是全局调用
-    }
-}
-
-console.log(o1.fn())
-
-console.log(o2.fn())
-
-console.log(o3.fn())
