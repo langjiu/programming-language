@@ -184,9 +184,96 @@ console.log(obj.hasOwnProperty('toString')); // aaa
 console.log(Object.prototype.hasOwnProperty.call(obj, 'toString'));  // false
 ```
 
+**Function.prototype.apply()**
+
+apply 和 call 作用类似， 也是改变 this 指向， 然后调用该函数， 唯一区别是 apply 接收数组作为函数执行时的参数。 语法如下：
+
+`func.apply(thisValue, [arg1, arg2, ...])`
+
+apply 方法的第一个参数也是 this 所要指向的那个对象， 如果设为 null 或 undefined, 则等同于指向全局对象。
+
+第二个参数则是一个数组，该数组的所有成员依次作为参数， 传入原函数。
+
+原函数的参数， 在 call 方法中必须一个个添加， 但是在 apply 方法中， 必须以数组形式添加。
+
+```js
+function f(x,y) {
+    console.log(x + y);
+}
+f.call(null, 1, 1); // 2
+f.apply(null, [1,1]); // 2
+```
+
+利用这一特性， 可以实现很多小功能。 比如 输出数组的最大值：
+
+```js
+var arr = [1,2,3,4,5];
+
+console.log(Math.max.apply(null, arr)); // 5
+```
+
+通过 apply 方法， 利用 Array 构造函数将数组的空元素变成 undefined
+
+```js
+var a = ['a',,'b'];
+console.log(Array.apply(null,a)) // [ 'a', undefined, 'b' ]
+```
+空元素与 undefined 的差别在于， 数组的 forEach 方法会跳过空元素， 但是不会跳出 undefined. 因此， 遍历内部元素的时候， 会得到不同的结果。
+
+```js
+var a = ['a',,'b'];
+
+function print(i) {
+    console.log(i);
+}
+
+a.forEach(print);
+// a
+// b
+```
+
+配合数组对象的 slice 方法， 可以将一个类似的数组的对象 （比如 arguments对象）转为真正的数组。
+````js
+console.log(Array.prototype.slice.apply({0:1,1:2,2:3})) // []
+
+console.log(Array.prototype.slice.apply({0:1,1:2,2:3, length:3})) // [ 1, 2, 3 ]
+
+console.log(Array.prototype.slice.apply({0:1,1:2,2:3, length:5})) // [ 1, 2, 3, <2 empty items> ]
+````
+
+**Function.prototype.bind()**
+
+bind 用于将函数体内的 this 绑定到某个对象， 然后返回一个新的函数
+
+```js
+var d = new Date();
+
+console.log(d.getTime()); // 1703084676116
+
+var print = d.getTime;
+print() // TypeError: this is not a Date object. 类型错误：this 不是日期对象
 
 
+```
+报错是因为 d.getTime 赋值给 print 后， getTime 内部的 this 指向方式变化， 已经不再指向 date 对象实例了。
 
+解决方法：
+```js
+/var print = d.getTime.bind(d);
+console.log(print()) // 1703084989690
+```
+
+```js
+var counter = {
+    count: 0,
+    add() {
+        this.count++;
+    }
+}
+var fn = counter.add.bind(counter);
+fn();
+console.log(counter.count); // 1
+```
 
 > <a id="answer">this 的指向哪几种？</a>
 >  

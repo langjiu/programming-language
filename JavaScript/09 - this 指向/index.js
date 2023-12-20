@@ -117,21 +117,59 @@
 
 // call 一个经常的应用， 就是调用原生的方法
 
-var obj = {};
+// var obj = {};
+//
+// console.log(obj.hasOwnProperty('toString')); // false
+// console.log(obj.toString()); // [object Object]
+//
+// // 通过上面的例子， 我们可以知道
+// // obj 能够调用 toString, 但是 toString 这个方法并不是他自身所拥有的
+// // 来自它的原型对象上面
+//
+// obj.hasOwnProperty = function () {
+//     return 'aaa';
+// }
+// console.log(obj.hasOwnProperty('toString')); // aaa
+//
+// // 上面我们对 hasOwnProperty 这个方法进行了覆盖
+// // 使用 call 可以调用原生的方法
+// console.log(Object.prototype.hasOwnProperty.call(obj, 'toString')); // false
 
-console.log(obj.hasOwnProperty('toString')); // false
-console.log(obj.toString()); // [object Object]
+// var arr = [1,2,3,4,5];
+//
+// console.log(Math.max.apply(null, arr));
+//
+// var a = ['a',,'b'];
+// console.log(Array.apply(null,a)) // [ 'a', undefined, 'b' ]
 
-// 通过上面的例子， 我们可以知道
-// obj 能够调用 toString, 但是 toString 这个方法并不是他自身所拥有的
-// 来自它的原型对象上面
+// function print(i) {
+//     console.log(i);
+// }
+//
+// a.forEach(print);
 
-obj.hasOwnProperty = function () {
-    return 'aaa';
+// console.log(Array.prototype.slice.apply({0:1,1:2,2:3})) // []
+//
+// console.log(Array.prototype.slice.apply({0:1,1:2,2:3, length:3})) // [ 1, 2, 3 ]
+//
+// console.log(Array.prototype.slice.apply({0:1,1:2,2:3, length:5})) // [ 1, 2, 3, <2 empty items> ]
+
+// var d = new Date();
+//
+// console.log(d.getTime()); // 1703084676116
+//
+// // var print = d.getTime;
+// // print() // TypeError: this is not a Date object. 类型错误：this 不是日期对象
+//
+// var print = d.getTime.bind(d);
+// console.log(print()) // 1703084989690
+
+var counter = {
+    count: 0,
+    add() {
+        this.count++;
+    }
 }
-console.log(obj.hasOwnProperty('toString')); // aaa
-
-// 上面我们对 hasOwnProperty 这个方法进行了覆盖
-// 使用 call 可以调用原生的方法
-console.log(Object.prototype.hasOwnProperty.call(obj, 'toString')); // false
-
+var fn = counter.add.bind(counter);
+fn();
+console.log(counter.count); // 1
