@@ -164,12 +164,118 @@
 // var print = d.getTime.bind(d);
 // console.log(print()) // 1703084989690
 
-var counter = {
-    count: 0,
-    add() {
-        this.count++;
-    }
-}
-var fn = counter.add.bind(counter);
-fn();
-console.log(counter.count); // 1
+// var counter = {
+//     count: 0,
+//     add() {
+//         this.count++;
+//     }
+// }
+// var obj = {
+//     count: 100
+// }
+// var fn = counter.add.bind(obj);
+// fn();
+// console.log(counter.count); // 0
+// console.log(obj.count); // 101
+
+// var add = function (x,y) {
+//     return x * this.m + y * this.n;
+// }
+//
+// var obj = {
+//     m: 2,
+//     n: 2
+// }
+// var newAdd = add.bind(obj, 5);
+// console.log(newAdd(5))
+
+// function add(x, y) {
+//     return x + y;
+// }
+//
+// var plus5 = add.bind(null, 5);
+// console.log(plus5(10)) // 15
+
+// var counter = {
+//     count: 0,
+//     add() {
+//         'use strict'
+//         this.count++;
+//     }
+// }
+//
+// function callback(fn) {
+//     fn();
+// }
+//
+// callback(counter.add.bind(counter));
+// console.log(counter.count) // 1
+
+// var obj = {
+//     name: '张三',
+//     times:[1,2,3],
+//     print: function () {
+//         // this.times.forEach(function (n){
+//         //     console.log(this.name); // undefined
+//         //     console.log(this === global); // true
+//         // });
+//
+//         this.times.forEach(function (n){
+//             console.log(this.name); // 张三
+//             console.log(this === global); // false
+//         }.bind(this));
+//     }
+// };
+//
+// obj.print()
+
+// var push = Function.prototype.call.bind(Array.prototype.push);
+// var pop = Function.prototype.call.bind(Array.prototype.pop);
+// var a = [0];
+// push(a, 1, 2, 3)
+// console.log(a);
+//
+// pop(a);
+// console.log(a)
+
+
+// function f() {
+//     console.log(this.v);
+// }
+// var o = { v: 123};
+
+// var bind = Function.prototype.call.bind(Function.prototype.bind);
+//
+// bind(f, o)()
+
+// const obj = {
+//     x: 10,
+//     test: function () {
+//         console.log(this);
+//         console.log(this.x);
+//     }
+// }
+// obj.test();
+// { x: 10, test: [Function: test] }
+// 10
+
+
+// var x= 20;
+// const obj = {
+//     x : 10,
+//     test: () => {
+//         console.log(this);
+//         console.log(this.x);
+//     }
+// }
+// obj.test();
+// // {}
+// // undefined
+
+const Test = (name,age) => {
+    this.name = name;
+    this.age = age;
+};
+
+const test = new Test('张三', 19);
+// TypeError: Test is not a constructor // 类型错误：测试不是构造函
